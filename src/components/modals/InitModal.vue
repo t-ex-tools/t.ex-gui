@@ -132,7 +132,7 @@ export default {
     };
   },
   mounted() {    
-    tex.Storage.get(["indexes"])
+    tex.default.Storage.get(["indexes"])
       .then((res) => {
         this.setIndexes(res.indexes);
       });
@@ -140,7 +140,7 @@ export default {
     const self = this;
     let elem = document.getElementById("init-modal");
     elem.addEventListener("show.bs.modal", function() {
-      tex.Storage.get(["indexes"])
+      tex.default.Storage.get(["indexes"])
         .then((res) => {
           self.setIndexes(res.indexes);
         });
@@ -167,7 +167,7 @@ export default {
         tag: this.boundaries.dataTag,
         length: i.length
       });        
-      tex.Data.setIndexes(i); // TODO: state change not good
+      tex.default.Data.setIndexes(i); // TODO: state change not good
     },
   },
 };

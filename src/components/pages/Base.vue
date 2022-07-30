@@ -170,16 +170,16 @@ export default {
   },
   data: () => {
     return {
-      Util: tex.Util,
+      Util: tex.default.Util,
       queries: {
-        default: tex.Queries.groups(),
+        default: tex.default.Queries.groups(),
         selected: 0,
       },
       loading: { ...empty },
       data: {},
       values: {
         selected: 0,
-        options: tex.Util.options()
+        options: tex.default.Util.options()
       },
     };
   },
@@ -188,7 +188,7 @@ export default {
       return Math.round((this.loading.loaded / this.loading.total) * 100);
     },
     headings() {
-      return tex.Util.headings(
+      return tex.default.Util.headings(
         this.queries.default[this.queries.selected]
       );
     },
@@ -230,7 +230,7 @@ export default {
     query() {
       let type = this.feature.split(".")[0];
 
-      tex.Statistics.query(
+      tex.default.Statistics.query(
         type,
         {
           [this.feature]: [toRaw(this.queries.default[this.queries.selected])],

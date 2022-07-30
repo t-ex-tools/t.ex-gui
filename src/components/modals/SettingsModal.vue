@@ -89,11 +89,11 @@ export default {
   data: () => {
     return {
       values: {},
-      settings: tex.Setting.config(),
+      settings: tex.default.Setting.config(),
     };
   },
   mounted() {
-    tex.Setting.all((settings) => this.values = settings);
+    tex.default.Setting.all((settings) => this.values = settings);
   },
   methods: {
     set(evt) {
@@ -107,11 +107,11 @@ export default {
       
       this.values[evt.target.name] = n;
 
-      if (tex.Settings[evt.target.name].handler) {
-        tex.Settings[evt.target.name].handler(n);
+      if (tex.default.Settings[evt.target.name].handler) {
+        tex.default.Settings[evt.target.name].handler(n);
       }
 
-      tex.Setting
+      tex.default.Setting
         .save(
           toRaw(this.values),
           (settings) => {

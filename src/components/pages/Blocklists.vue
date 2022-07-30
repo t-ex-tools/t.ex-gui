@@ -51,7 +51,7 @@ export default {
     }
   },
   mounted() {
-    tex.Data.blocklists((lists) => this.lists = lists);
+    tex.default.Data.blocklists((lists) => this.lists = lists);
   }
 }
 </script>

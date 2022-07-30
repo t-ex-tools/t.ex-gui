@@ -10,14 +10,14 @@ import { markRaw } from "vue";
 
 import mitt from "mitt";
 
-tex.Setting.get(
+tex.default.Setting.get(
   ["darkMode"],
-  (settings) => tex.Setting.config().darkMode.handler(settings.darkMode)
+  (settings) => tex.default.Setting.config().darkMode.handler(settings.darkMode)
 );
 
 const routes = StaticRoutes.concat(
-  tex.FeatureExtractor.features().map((f) => {
-    let featureInfo = tex.FeatureExtractor.info(f);
+  tex.default.FeatureExtractor.features().map((f) => {
+    let featureInfo = tex.default.FeatureExtractor.info(f);
     return {
       path: "/" + f,
       label: featureInfo.title,

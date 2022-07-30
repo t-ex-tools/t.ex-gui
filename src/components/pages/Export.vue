@@ -215,8 +215,8 @@ export default {
   data: () => {
     return {
       suffix: "export",
-      FeatureExtractor: tex.FeatureExtractor,
-      Queries: tex.Queries,
+      FeatureExtractor: tex.default.FeatureExtractor,
+      Queries: tex.default.Queries,
       labels: {
         types: {
           http: "HTTP/S requests & responses",
@@ -239,7 +239,7 @@ export default {
     types() {
       return [
         ...new Set(
-          tex.FeatureExtractor.features().map((f) => f.split(".").shift())
+          tex.default.FeatureExtractor.features().map((f) => f.split(".").shift())
         ),
       ];
     },
@@ -278,7 +278,7 @@ export default {
       }
     },
     groups(type) {
-      return tex.FeatureExtractor.navigation().filter(
+      return tex.default.FeatureExtractor.navigation().filter(
         (f) => f.featureGroup[0].path.split(".").shift() === type
       );
     },
@@ -302,7 +302,7 @@ export default {
       }
     },
     statistics() {
-      tex.Statistics.query(
+      tex.default.Statistics.query(
         this.types[this.selected],
         toRaw(this.queries),
         (info) => {
@@ -316,20 +316,20 @@ export default {
             this.data[info.query][info.group] = { [info.feature]: info.data };
           }
           
-          let query = tex.Queries.groups().find((q) => q.id === info.query);
+          let query = tex.default.Queries.groups().find((q) => q.id === info.query);
           if (info.group !== query.members.length - 1) {
             return;
           }
 
-          let headings = tex.Util.headings(query); 
+          let headings = tex.default.Util.headings(query); 
           
-          tex.Util
+          tex.default.Util
             .options()
             .forEach((option) => {
-              tex.Util.download(
-                tex.Util.csv(
+              tex.default.Util.download(
+                tex.default.Util.csv(
                   headings,
-                  tex.Util.table(
+                  tex.default.Util.table(
                     headings,
                     this.data[info.query],
                     info.feature,
@@ -352,7 +352,7 @@ export default {
       let batch = [];
       let n = 0;
 
-      tex.Data.stream(type, (chunk, loaded, total) => {
+      tex.default.Data.stream(type, (chunk, loaded, total) => {
         this.view.loaded = loaded;
         this.view.total = total;
 
@@ -379,7 +379,7 @@ export default {
         }
 
         batch = batch.concat(chunk);
-        if (this.memoryLimit <= tex.Util.memorySizeOf(batch) || loaded === total) {
+        if (this.memoryLimit <= tex.default.Util.memorySizeOf(batch) || loaded === total) {
           let filename = this.dataTag + 
             "/" + 
             type + 

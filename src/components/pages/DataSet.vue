@@ -133,7 +133,7 @@ export default {
   },
   methods: {
     init() {
-      tex.Data.chunks((chunks, loaded, total) => {
+      tex.default.Data.chunks((chunks, loaded, total) => {
         this.loading.isLoading = true;
         this.loading.loaded = loaded;
         this.loading.total = total;
