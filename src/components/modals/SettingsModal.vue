@@ -115,8 +115,11 @@ export default {
         .save(
           toRaw(this.values),
           (settings) => {
-            browser.runtime.sendMessage(settings);
-            this.emitter.emit("settings", settings);
+            browser.runtime
+              .sendMessage(settings);
+
+            this.emitter
+              .emit("settings", settings);
           }
         );
     },
