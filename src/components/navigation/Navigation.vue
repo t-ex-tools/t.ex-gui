@@ -54,7 +54,7 @@ import StaticRoutes from "./StaticRoutes.js";
 export default {
   data: () => {
     return {
-      FeatureExtractor: tex.default.FeatureExtractor,
+      FeatureExtractor: tex.FeatureExtractor,
       staticRoutes: StaticRoutes
     };
   },

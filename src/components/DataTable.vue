@@ -7,7 +7,7 @@
       <thead>
         <tr>
           <th
-            v-for="(heading, index) in headings"
+            v-for="(heading, index) in items.slice(0, 1).pop()"
             :key="index"
             scope="col"
             @click="sort"
@@ -85,10 +85,6 @@
 <script>
 export default {
   props: {
-    headings: {
-      type: Array,
-      default: () => [],
-    },
     items: {
       type: Array,
       default: () => [],
@@ -115,7 +111,7 @@ export default {
       return this.items.length <= (this.view.page + 1) * this.view.window;
     },
     page() {
-      return [...this.items.slice(0, -1)]
+      return [...this.items.slice(1, -1)]
         .sort((a, b) =>
           this.view.sort.by === 0
             ? this.sortString(a, b)

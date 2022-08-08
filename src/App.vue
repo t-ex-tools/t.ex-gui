@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-bar 
-      :data-tag="tag"
+      :data-tag="boundaries.dataTag"
       :data-length="length"
       :data-loaded="loaded"
       @reset="reset"
@@ -15,7 +15,8 @@
 
         <div class="col-9 pt-3 mb-3">
           <router-view
-            :data-tag="tag"
+            :data-tag="boundaries.dataTag"
+            :boundaries="boundaries"
             :data-length="length"
             :data-loaded="loaded"
           />
@@ -48,7 +49,11 @@ export default {
   },
   data: () => {
     return {
-      tag: "",
+      boundaries: {
+        dataTag: "",
+        lower: 0,
+        upper: 0
+      },
       length: 0
     };
   },
@@ -61,7 +66,7 @@ export default {
   },
   methods: {
     setLoaded(data) {
-      this.tag = data.tag;
+      this.boundaries = data.boundaries;
       this.length = data.length;
     },
     reset() {

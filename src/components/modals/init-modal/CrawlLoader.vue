@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     load: function() {
-      tex.default.Crawl.all((crawls) => {
+      tex.Crawl.all((crawls) => {
         this.crawls = crawls;
       });
     },

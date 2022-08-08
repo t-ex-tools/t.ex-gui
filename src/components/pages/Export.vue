@@ -211,12 +211,16 @@ export default {
       type: String,
       default: () => "",
     },
+    boundaries: {
+      type: Object,
+      default: () => ({ lower: 0, upper: 0 }),
+    },    
   },
   data: () => {
     return {
       suffix: "export",
-      FeatureExtractor: tex.default.FeatureExtractor,
-      Queries: tex.default.Queries,
+      FeatureExtractor: tex.FeatureExtractor,
+      Queries: tex.Queries,
       labels: {
         types: {
           http: "HTTP/S requests & responses",
@@ -239,7 +243,7 @@ export default {
     types() {
       return [
         ...new Set(
-          tex.default.FeatureExtractor.features().map((f) => f.split(".").shift())
+          tex.FeatureExtractor.features().map((f) => f.split(".").shift())
         ),
       ];
     },
@@ -278,7 +282,7 @@ export default {
       }
     },
     groups(type) {
-      return tex.default.FeatureExtractor.navigation().filter(
+      return tex.FeatureExtractor.navigation().filter(
         (f) => f.featureGroup[0].path.split(".").shift() === type
       );
     },
@@ -302,49 +306,38 @@ export default {
       }
     },
     statistics() {
-      tex.default.Statistics.query(
-        this.types[this.selected],
-        toRaw(this.queries),
-        (info) => {
-          if (info.loaded !== info.total) {
-            return
-          }
 
-          if (!this.data[info.query]) {
-            this.data[info.query] = { [info.group]: { [info.feature]: info.data } };
-          } else {
-            this.data[info.query][info.group] = { [info.feature]: info.data };
-          }
-          
-          let query = tex.default.Queries.groups().find((q) => q.id === info.query);
-          if (info.group !== query.members.length - 1) {
-            return;
-          }
+      tex
+        .Table
+        .options()
+        .forEach((option) => {
+          let params = {
+            condition: (result) => result.loaded === result.total,
+            boundaries: this.boundaries,
+            type: this.types[this.selected],
+            queries: toRaw(this.queries),
+            option: option.impl
+          };
 
-          let headings = tex.default.Util.headings(query); 
-          
-          tex.default.Util
-            .options()
-            .forEach((option) => {
-              tex.default.Util.download(
-                tex.default.Util.csv(
-                  headings,
-                  tex.default.Util.table(
-                    headings,
-                    this.data[info.query],
-                    info.feature,
-                    option.impl
-                  )
-                ),
-                'csv',
-                this.dataTag,
-                info.feature,
-                option.slug,
-                query.label
-              )
-            });
+          tex
+            .StatisticsController
+            .compute(
+              params,
+              (table, meta) => {
+
+                tex.Util.download(
+                  tex.Util.csv(table),
+                  'csv',
+                  this.dataTag,
+                  meta.feature,
+                  option.slug,
+                  meta.query.label
+                )
+              }
+            );
         }
-      )
+      );
+      
     },
     download(transformed, type) {
       // let type = this.types[this.selected];
@@ -352,7 +345,7 @@ export default {
       let batch = [];
       let n = 0;
 
-      tex.default.Data.stream(type, (chunk, loaded, total) => {
+      tex.DataStream.labeled(this.boundaries, type, (chunk, loaded, total) => {
         this.view.loaded = loaded;
         this.view.total = total;
 
@@ -379,7 +372,7 @@ export default {
         }
 
         batch = batch.concat(chunk);
-        if (this.memoryLimit <= tex.default.Util.memorySizeOf(batch) || loaded === total) {
+        if (this.memoryLimit <= tex.Util.memorySizeOf(batch) || loaded === total) {
           let filename = this.dataTag + 
             "/" + 
             type + 

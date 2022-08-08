@@ -90,6 +90,10 @@ export default {
       type: String,
       default: () => ""
     },
+    boundaries: {
+      type: Object,
+      default: () => ({ lower: 0, upper: 0 }),
+    },    
     dataLength: {
       type: Number,
       default: () => 0
@@ -133,7 +137,7 @@ export default {
   },
   methods: {
     init() {
-      tex.default.Data.chunks((chunks, loaded, total) => {
+      tex.DataStream.unlabeled(this.boundaries, (chunks, loaded, total) => {
         this.loading.isLoading = true;
         this.loading.loaded = loaded;
         this.loading.total = total;

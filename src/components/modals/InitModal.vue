@@ -132,19 +132,14 @@ export default {
     };
   },
   mounted() {    
-    tex.default.Storage.get(["indexes"])
-      .then((res) => {
-        this.setIndexes(res.indexes);
-      });
+    tex.Index.all((indexes) => 
+      this.setIndexes(indexes));
 
-    const self = this;
     let elem = document.getElementById("init-modal");
     elem.addEventListener("show.bs.modal", function() {
-      tex.default.Storage.get(["indexes"])
-        .then((res) => {
-          self.setIndexes(res.indexes);
-        });
-    });
+      tex.Index.all((indexes) => 
+        this.setIndexes(indexes));
+    }.bind(this));
   },
   methods: {
     setIndexes(indexes) {
@@ -159,15 +154,13 @@ export default {
       console.debug("Boundaries retrieved " + JSON.stringify(this.boundaries));
     },
     handleOk() {
-      let i = this.indexes
-        .filter((t) => t >= this.boundaries.lower && t <= this.boundaries.upper)
-        .map((t) => t.toString());
+      let i = tex.Index
+        .range(this.indexes, this.boundaries.lower, this.boundaries.upper);
       
       this.$emit("data", {
-        tag: this.boundaries.dataTag,
+        boundaries: this.boundaries,
         length: i.length
-      });        
-      tex.default.Data.setIndexes(i); // TODO: state change not good
+      });
     },
   },
 };

@@ -201,7 +201,7 @@ export default {
   },
   data: () => {
     return {
-      Crawler: tex.default.Crawler,
+      Crawler: tex.Crawler,
       crawls: [],
       crawl: {
         tag: "",
@@ -241,9 +241,9 @@ export default {
     }
   },
   mounted() {
-    tex.default.Setting.all((settings) => this.settings = settings);
-    tex.default.WebsiteList.all((lists) => this.lists = lists);
-    tex.default.Crawl.all((crawls) => this.crawls = crawls.reverse());
+    tex.Setting.all((settings) => this.settings = settings);
+    tex.WebsiteList.all((lists) => this.lists = lists);
+    tex.Crawl.all((crawls) => this.crawls = crawls.reverse());
 
     this.emitter.on("settings", (cfg) => {
       this.settings = cfg.settings;

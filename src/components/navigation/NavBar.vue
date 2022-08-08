@@ -7,7 +7,7 @@
       >
         T.EX - The Transparency EXtension
         <span class="small">
-          v{{ browser.runtime.getManifest().version }}
+          v{{ version }}
         </span>
       </a>
       <div class="d-flex">
@@ -73,7 +73,7 @@ export default {
   emits: ["reset"],
   data: () => {
     return {
-      browser,
+      version: tex.Runtime.getManifest().version,
       max: 32 
     };
   },

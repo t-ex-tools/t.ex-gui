@@ -38,8 +38,6 @@
         </table>
       </div>
     </div>
-
-    <!-- TODO: EasyList & EasyPrivacy -->
   </div>
 </template>
 
@@ -47,11 +45,8 @@
 export default {
   data: () => {
     return {
-      lists: []
+      lists: tex.Blocklists
     }
   },
-  mounted() {
-    tex.default.Data.blocklists((lists) => this.lists = lists);
-  }
 }
 </script>

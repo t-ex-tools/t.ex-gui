@@ -61,15 +61,7 @@
           class="btn btn-outline-primary float-end"
           type="button"
           @click="Util.download(
-            Util.csv(
-              headings,
-              Util.table(
-                headings,
-                data,
-                feature,
-                values.options[values.selected].impl
-              )
-            ),
+            Util.csv(table),
             'csv',
             dataTag,
             feature,
@@ -124,15 +116,7 @@
 
     <div class="row">
       <div class="col">
-        <data-table
-          :headings="headings"
-          :items="Util.table(
-            headings,
-            data,
-            feature,
-            values.options[values.selected].impl
-          )"
-        />
+        <data-table :items="table" />
       </div>
     </div>
   </div>
@@ -167,30 +151,29 @@ export default {
       type: String,
       default: () => "",
     },
+    boundaries: {
+      type: Object,
+      default: () => ({ lower: 0, upper: 0 }),
+    },
   },
   data: () => {
     return {
-      Util: tex.default.Util,
+      Util: tex.Util,
       queries: {
-        default: tex.default.Queries.groups(),
+        default: tex.Queries.groups(),
         selected: 0,
       },
       loading: { ...empty },
-      data: {},
+      table: [],
       values: {
         selected: 0,
-        options: tex.default.Util.options()
+        options: tex.Table.options()
       },
     };
   },
   computed: {
     progress() {
       return Math.round((this.loading.loaded / this.loading.total) * 100);
-    },
-    headings() {
-      return tex.default.Util.headings(
-        this.queries.default[this.queries.selected]
-      );
     },
   },
   watch: {
@@ -203,6 +186,12 @@ export default {
         this.reset();
       },
     },
+    values: {
+      deep: true,
+      handler: function () {
+        this.reset();
+      },
+    },    
     queries: {
       deep: true,
       handler: function () {
@@ -223,26 +212,36 @@ export default {
     });
   },
   methods: {
+
     reset() {
       this.data = {};
       this.query();
     },
-    query() {
-      let type = this.feature.split(".")[0];
 
-      tex.default.Statistics.query(
-        type,
-        {
-          [this.feature]: [toRaw(this.queries.default[this.queries.selected])],
-        },
-        (data) => {
-          if (!this.data[data.group]) {
-            this.data[data.group] = {};
-          }
-          this.data[data.group][data.feature] = data.data;
-        }
-      );
+    query() {
+
+      tex
+        .StatisticsController
+        .compute(
+
+          {
+            condition: () => true,
+            boundaries: this.boundaries,
+            type: this.feature.split(".").shift(),
+            queries: { 
+              [this.feature]: [ 
+                toRaw(this.queries.default[this.queries.selected]) 
+              ] 
+            },
+            option: this.values.options[this.values.selected].impl
+          },
+
+          (table) => 
+            this.table = table
+        );
     },
+
   },
+
 };
 </script>
