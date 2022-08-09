@@ -306,38 +306,12 @@ export default {
       }
     },
     statistics() {
-
-      tex
-        .Table
-        .options()
-        .forEach((option) => {
-          let params = {
-            condition: (result) => result.loaded === result.total,
-            boundaries: this.boundaries,
-            type: this.types[this.selected],
-            queries: toRaw(this.queries),
-            option: option.impl
-          };
-
-          tex
-            .StatisticsController
-            .compute(
-              params,
-              (table, meta) => {
-
-                tex.Util.download(
-                  tex.Util.csv(table),
-                  'csv',
-                  this.dataTag,
-                  meta.feature,
-                  option.slug,
-                  meta.query.label
-                )
-              }
-            );
-        }
+      tex.Export.statistics(
+        this.boundaries,
+        this.types[this.selected],
+        toRaw(this.queries),
+        this.dataTag
       );
-      
     },
     download(transformed, type) {
       // let type = this.types[this.selected];

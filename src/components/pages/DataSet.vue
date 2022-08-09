@@ -155,29 +155,23 @@ export default {
       });      
     },
     download() {
-      let csv = [this.headings]
-        .concat([[
-          this.dataTag,
-          this.dataLength,
-          this.sizes.http,
-          this.sizes.js
-        ]])
-        .map((row) => {
-          return row
-            .map((h) => '"' + h.toString().replace(/"/g, '\\"') + '"')
-            .join(",");
-        })
-        .join("\n");
-
-      browser.downloads.download({
-        filename:
-          this.dataTag +
-          "/" +
-          "stats.csv",
-        url: URL.createObjectURL(
-          new Blob([csv], { type: "data:application/csv;charset=utf-8" })
-        ),
-      });
+      tex
+        .Export
+        .download(
+          tex.Export.filename([this.dataTag], ["stats"], "csv"),
+          tex.Table.csv(
+            [this.headings]
+              .concat([
+                [ 
+                  this.dataTag, 
+                  this.dataLength, 
+                  this.sizes.http, 
+                  this.sizes.js 
+                ]
+              ]),
+          ),
+          "data:application/csv;charset=utf-8"
+        );
     },    
   }
 };

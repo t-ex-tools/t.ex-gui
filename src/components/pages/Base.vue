@@ -60,13 +60,18 @@
         <button
           class="btn btn-outline-primary float-end"
           type="button"
-          @click="Util.download(
-            Util.csv(table),
-            'csv',
-            dataTag,
-            feature,
-            values.options[values.selected].slug,
-            queries.default[queries.selected].label
+          @click="tex.Export.download(
+            tex.Export.filename(
+              [dataTag, feature],
+              [
+                feature, 
+                values.options[values.selected].slug,
+                queries.default[queries.selected].label
+              ],
+              'csv'
+            ),
+            tex.Table.csv(table),
+            'data:application/csv;charset=utf-8'
           )"
         >
           <i class="bi bi-table me-2" />
@@ -158,7 +163,7 @@ export default {
   },
   data: () => {
     return {
-      Util: tex.Util,
+      tex,
       queries: {
         default: tex.Queries.groups(),
         selected: 0,
@@ -173,7 +178,7 @@ export default {
   },
   computed: {
     progress() {
-      return Math.round((this.loading.loaded / this.loading.total) * 100);
+      return tex.Statistics.percent(this.loading.loaded, this.loading.total);
     },
   },
   watch: {
