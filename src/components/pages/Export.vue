@@ -234,9 +234,7 @@ export default {
       selected: 0,
       features: [],
       queries: {},
-      data: {},
       option: 0,
-      memoryLimit: 250 * 1000000,
     };
   },
   computed: {
@@ -314,61 +312,16 @@ export default {
       );
     },
     download(transformed, type) {
-      // let type = this.types[this.selected];
-
-      let batch = [];
-      let n = 0;
-
-      tex.DataStream.labeled(this.boundaries, type, (chunk, loaded, total) => {
-        this.view.loaded = loaded;
-        this.view.total = total;
-
-        if (chunk === null) {
-          return;
+      tex.Export.data(
+        this.boundaries, 
+        type, 
+        (transformed) ? this.features : [], 
+        this.dataTag, 
+        (loaded, total) => {
+          this.view.loaded = loaded;
+          this.view.total = total;
         }
-
-        if (transformed) {
-          chunk = chunk.map((d) => {
-            let output = this.features.reduce((acc, f) => {
-              let path = f.split(".").slice(1);
-              let last = path.pop();
-
-              // https://stackoverflow.com/a/39249367
-              // from Laurens' answer on Aug 31, 2016 at 12:14
-              let obj = path.reduce((o, key) => (o[key] = o[key] || {}), acc);
-              obj[last] = this.FeatureExtractor.extract(f, d);
-              acc.labels = d.labels;
-
-              return acc;
-            }, {});
-            return output;
-          });
-        }
-
-        batch = batch.concat(chunk);
-        if (this.memoryLimit <= tex.Util.memorySizeOf(batch) || loaded === total) {
-          let filename = this.dataTag + 
-            "/" + 
-            type + 
-            "/" +
-            type + 
-            "." + 
-            n + 
-            ".json";
-
-          this.file(filename, [ ...batch ]);
-          n++;
-          batch = [];
-        }
-      });
-    },
-    file: function (filename, payload) {
-      browser.downloads.download({
-        filename: filename,
-        url: URL.createObjectURL(
-          new Blob([JSON.stringify(payload)], { type: "application/json" })
-        ),
-      });
+      )
     },
   },
 };
