@@ -231,7 +231,9 @@ export default {
       };
     },
     percent() {
-      return Math.round((this.log.tabsCompleted / this.log.tabsToFinish) * 100);
+      return tex
+        .Statistics
+        .percent(this.log.tabsCompleted, this.log.tabsToFinish);
     },
     running() {
       return this.log.hasOwnProperty("startedAt")

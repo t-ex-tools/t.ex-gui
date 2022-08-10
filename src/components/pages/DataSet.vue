@@ -124,7 +124,9 @@ export default {
   },
   computed: {
     percent() {
-      return Math.round((this.loading.loaded / this.loading.total) * 100);
+      return tex
+        .Statistics
+        .percent(this.loading.loaded, this.loading.total);
     }
   },
   watch: {

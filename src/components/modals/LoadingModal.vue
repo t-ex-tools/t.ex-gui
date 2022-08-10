@@ -88,7 +88,9 @@ export default {
   },
   computed: {
     percent() {
-      return Math.round((this.loaded / this.total) * 100);
+      return tex
+        .Statistics
+        .percent(this.loaded, this.total);
     },
   },
 };

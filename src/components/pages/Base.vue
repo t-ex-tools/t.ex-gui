@@ -70,7 +70,12 @@
               ],
               'csv'
             ),
-            tex.Table.csv(table),
+            tex.Table.csv(
+              tex.Table.to(
+                table, 
+                values.options[values.selected].impl
+              )
+            ),
             'data:application/csv;charset=utf-8'
           )"
         >
@@ -121,7 +126,12 @@
 
     <div class="row">
       <div class="col">
-        <data-table :items="table" />
+        <data-table 
+          :items="tex.Table.to(
+            table, 
+            values.options[values.selected].impl
+          )" 
+        />
       </div>
     </div>
   </div>
@@ -178,7 +188,9 @@ export default {
   },
   computed: {
     progress() {
-      return tex.Statistics.percent(this.loading.loaded, this.loading.total);
+      return tex
+        .Statistics
+        .percent(this.loading.loaded, this.loading.total);
     },
   },
   watch: {
@@ -190,13 +202,7 @@ export default {
       handler: function () {
         this.reset();
       },
-    },
-    values: {
-      deep: true,
-      handler: function () {
-        this.reset();
-      },
-    },    
+    }, 
     queries: {
       deep: true,
       handler: function () {
@@ -237,8 +243,7 @@ export default {
               [this.feature]: [ 
                 toRaw(this.queries.default[this.queries.selected]) 
               ] 
-            },
-            option: this.values.options[this.values.selected].impl
+            }
           },
 
           (table) => 
