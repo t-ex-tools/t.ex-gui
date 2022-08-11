@@ -228,9 +228,9 @@ export default {
     save(list) {
       if (this.lists.selected) {
         let index = this.lists.all.indexOf(this.lists.selected);
-        tex.WebsiteList.set(index, list, (lists) =>  this.lists.all = lists);
+        tex.WebsiteList.set(index, toRaw(list), (lists) =>  this.lists.all = lists);
       } else {
-        tex.WebsiteList.add(list, (lists) =>  this.lists.all = lists);
+        tex.WebsiteList.add(toRaw(list), (lists) =>  this.lists.all = lists);
       }
       this.notify("Website list successfully saved.");
     },
