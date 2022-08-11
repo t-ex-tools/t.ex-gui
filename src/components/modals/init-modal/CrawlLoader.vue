@@ -59,7 +59,7 @@ export default {
   methods: {
     load: function() {
       tex.Crawl.all((crawls) => {
-        this.crawls = crawls;
+        this.crawls = crawls.reverse();
       });
     },
     updateLimit: function () {

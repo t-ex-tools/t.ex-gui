@@ -54,7 +54,7 @@
         </div>
 
         <div
-          v-if="percent === 100"
+          v-if="loaded === total"
           class="modal-footer"
         >
           <button

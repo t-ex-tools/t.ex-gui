@@ -247,13 +247,6 @@ export default {
     },
   },
   mounted() {
-    /*
-    FeatureExtractor
-      .features()
-      .filter((feature) => feature.startsWith("http"))
-      .forEach((feature) => this.queries[feature] = Queries.groups());
-    console.log(Object.values(this.queries).length);
-    */
     const self = this;
     let c = document.getElementById("types");
     c.addEventListener("show.bs.collapse", function (e) {

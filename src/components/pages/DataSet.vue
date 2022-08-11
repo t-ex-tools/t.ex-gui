@@ -39,7 +39,7 @@
       </div>
     </div>    
 
-    <div class="row">
+    <div class="row mt-3">
       <div class="col">
         <div 
           v-if="loading.isLoading" 
@@ -108,7 +108,7 @@ export default {
       loading: { 
         isLoading: false, 
         loaded: 0, 
-        total: 0 
+        total: -1 
       },
       headings: [
         "Data set name",
